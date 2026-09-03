@@ -1,0 +1,65 @@
+# Built application & build artifacts
+build/
+**/build/
+*.apk
+*.aab
+*.ap_
+*.dex
+
+# Gradle
+.gradle/
+**/.gradle/
+gradle-app.setting
+**/gradle-app.setting
+!gradle-wrapper.jar
+!gradlew
+!gradlew.bat
+
+# Local configuration, credentials & secrets
+local.properties
+secrets.properties
+signing.properties
+google-services.json
+*.jks
+*.keystore
+*.key
+*.p12
+*.pem
+
+# Android Studio / IntelliJ IDEA
+.idea/
+**/.idea/
+*.iml
+*.ipr
+*.iws
+out/
+captures/
+**/captures/
+
+# Android NDK / C++ build outputs
+.cxx/
+**/.cxx/
+.externalNativeBuild/
+**/.externalNativeBuild/
+obj/
+ndkBuild/
+
+# Profiler, crash logs & heap dumps
+*.hprof
+hs_err_pid*.log
+
+# OS-generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+Desktop.ini
+
+# General editor & environment directories
+.vscode/
+.fleet/
+*.swp
+*~
