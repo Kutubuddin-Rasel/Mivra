@@ -26,6 +26,16 @@ androidx-compose-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-
 androidx-compose-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 androidx-compose-material3 = { group = "androidx.compose.material3", name = "material3" }
 
+# CameraX: Modular camera toolkit for Android
+# Core abstractions (UseCase, Preview, ImageAnalysis, ImageCapture, CameraSelector)
+androidx-camera-core = { module = "androidx.camera:camera-core", version.ref = "camerax" }
+# Camera2 hardware implementation layer (required at runtime for CameraX to interface with device hardware)
+androidx-camera-camera2 = { module = "androidx.camera:camera-camera2", version.ref = "camerax" }
+# Lifecycle binding (ProcessCameraProvider to automatically bind camera sessions to Android LifecycleOwner)
+androidx-camera-lifecycle = { module = "androidx.camera:camera-lifecycle", version.ref = "camerax" }
+# Jetpack Compose UI viewfinder (provides native Compose components to render camera preview without legacy XML PreviewView)
+androidx-camera-compose = { module = "androidx.camera:camera-compose", version.ref = "camerax" }
+
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
