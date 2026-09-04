@@ -5,7 +5,7 @@ plugins {
 android {
     namespace = "com.kutubuddin.mivra"
     compileSdk {
-        version = release(36) {
+        version = release(37) {
             minorApiLevel = 1
         }
     }
@@ -40,4 +40,17 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(libs.androidx.junit)
+
+    // CameraX core and camera2 implementation
+    implementation(libs.androidx.camera.core)
+    implementation(libs.androidx.camera.camera2)
+
+    // CameraX Lifecycle library
+    implementation(libs.androidx.camera.lifecycle)
+
+    // CameraX View class
+    implementation(libs.androidx.camera.view)
+
+    // Optional: CameraX Extensions (uncomment if added to .toml)
+     implementation(libs.androidx.camera.extensions)
 }
