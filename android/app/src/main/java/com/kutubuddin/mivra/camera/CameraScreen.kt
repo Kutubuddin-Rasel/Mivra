@@ -18,7 +18,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 
@@ -42,7 +41,7 @@ fun CameraScreen(modifier: Modifier) {
     }
 
     if (hasCameraPermission) {
-        CameraPreviewPlaceholder(modifier = modifier.fillMaxSize())
+        CameraPreview(modifier = modifier.fillMaxSize())
     } else {
         CameraPermissionContent(
             onRequestPermission = {
@@ -75,16 +74,3 @@ private fun CameraPermissionContent(
     }
 }
 
-
-@Composable
-private fun CameraPreviewPlaceholder(
-    modifier: Modifier = Modifier
-) {
-    Column(
-        modifier = modifier,
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center,
-    ) {
-        Text("Camera permission granted")
-    }
-}

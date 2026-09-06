@@ -35,6 +35,8 @@ androidx-camera-camera2 = { module = "androidx.camera:camera-camera2", version.r
 androidx-camera-lifecycle = { module = "androidx.camera:camera-lifecycle", version.ref = "camerax" }
 # Jetpack Compose UI viewfinder (provides native Compose components to render camera preview without legacy XML PreviewView)
 androidx-camera-compose = { module = "androidx.camera:camera-compose", version.ref = "camerax" }
+# Lifecylce
+androidx-lifecycle-runtime-compose = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "lifecycleRuntimeKtx"}
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
