@@ -2,6 +2,7 @@ package com.kutubuddin.mivra.camera
 
 import androidx.camera.compose.CameraXViewfinder
 import androidx.camera.core.CameraSelector
+import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.Preview
 import androidx.camera.core.SurfaceRequest
 import androidx.camera.lifecycle.ProcessCameraProvider
@@ -10,6 +11,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -21,6 +23,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.awaitCancellation
+import java.util.concurrent.Executors
 
 @Composable
 fun CameraPreview(modifier: Modifier = Modifier) {
@@ -45,10 +48,37 @@ fun CameraPreview(modifier: Modifier = Modifier) {
             }
     }
 
+    val imageAnalysis = remember {
+        ImageAnalysis.Builder()
+            .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
+            .build()
+    }
+
+    val analysisExecutor = remember {
+        Executors.newSingleThreadExecutor()
+    }
+
+    val diagnosticAnalyzer = remember {
+        DiagnosticFrameAnalyzer()
+    }
+
+    DisposableEffect(
+        imageAnalysis,
+        analysisExecutor,
+        diagnosticAnalyzer
+    ) {
+        imageAnalysis.setAnalyzer(analysisExecutor,diagnosticAnalyzer)
+        onDispose {
+            imageAnalysis.clearAnalyzer()
+            analysisExecutor.shutdown()
+        }
+    }
+
     LaunchedEffect(
         context,
         lifecycleOwner,
-        preview
+        preview,
+        imageAnalysis
     ) {
         cameraError = null
 
@@ -67,7 +97,8 @@ fun CameraPreview(modifier: Modifier = Modifier) {
             cameraProvider.bindToLifecycle(
                 lifecycleOwner,
                 CameraSelector.DEFAULT_BACK_CAMERA,
-                preview
+                preview,
+                imageAnalysis
             )
             awaitCancellation()
         } catch (cancellationException: CancellationException) {
@@ -75,7 +106,7 @@ fun CameraPreview(modifier: Modifier = Modifier) {
         } catch (exception: Exception) {
             cameraError = exception.message ?: "Unable to start camera"
         } finally {
-            cameraProvider.unbind(preview)
+            cameraProvider.unbind(preview,imageAnalysis)
         }
     }
 
