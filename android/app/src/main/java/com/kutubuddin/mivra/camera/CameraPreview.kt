@@ -19,11 +19,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.compose.LocalLifecycleOwner
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.awaitCancellation
 
 @Composable
 fun CameraPreview(modifier: Modifier = Modifier) {
     val context = LocalContext.current
-    val lifeCycleOwner = LocalLifecycleOwner.current
+    val lifecycleOwner = LocalLifecycleOwner.current
 
     var surfaceRequest by remember {
         mutableStateOf<SurfaceRequest?>(null)
@@ -45,20 +47,35 @@ fun CameraPreview(modifier: Modifier = Modifier) {
 
     LaunchedEffect(
         context,
-        lifeCycleOwner,
+        lifecycleOwner,
         preview
     ) {
-        try {
-            val cameraProvider = ProcessCameraProvider.awaitInstance(context)
+        cameraError = null
 
+        val cameraProvider = try {
+            ProcessCameraProvider.awaitInstance(context)
+        } catch (cancellationException: CancellationException) {
+            throw cancellationException
+        } catch (exception: Exception) {
+            cameraError = exception.message ?: "Unable to start camera"
+
+            return@LaunchedEffect
+        }
+
+        try {
             // While this lifecycle allows camera operation, use the default rear-facing camera to satisfy this Preview use case.
             cameraProvider.bindToLifecycle(
-                lifeCycleOwner,
+                lifecycleOwner,
                 CameraSelector.DEFAULT_BACK_CAMERA,
                 preview
             )
+            awaitCancellation()
+        } catch (cancellationException: CancellationException) {
+            throw cancellationException
         } catch (exception: Exception) {
             cameraError = exception.message ?: "Unable to start camera"
+        } finally {
+            cameraProvider.unbind(preview)
         }
     }
 

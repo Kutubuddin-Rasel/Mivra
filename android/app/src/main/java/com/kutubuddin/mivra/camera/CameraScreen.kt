@@ -22,7 +22,7 @@ import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 
 @Composable
-fun CameraScreen(modifier: Modifier) {
+fun CameraScreen(modifier: Modifier = Modifier) {
     val context = LocalContext.current
 
     var hasCameraPermission by remember {
@@ -47,7 +47,7 @@ fun CameraScreen(modifier: Modifier) {
             onRequestPermission = {
                 permissionLauncher.launch(Manifest.permission.CAMERA)
             },
-            modifier = Modifier.fillMaxSize()
+            modifier = modifier.fillMaxSize()
         )
     }
 }

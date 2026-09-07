@@ -7,10 +7,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import com.kutubuddin.mivra.camera.CameraScreen
 import com.kutubuddin.mivra.ui.theme.MivraTheme
 
@@ -21,7 +18,9 @@ class MainActivity : ComponentActivity() {
         setContent {
             MivraTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    CameraScreen(modifier = Modifier.fillMaxSize().padding(innerPadding))
+                    CameraScreen(modifier = Modifier
+                        .fillMaxSize()
+                        .padding(innerPadding))
                 }
             }
         }
