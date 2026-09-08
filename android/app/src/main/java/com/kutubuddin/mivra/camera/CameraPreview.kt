@@ -1,10 +1,12 @@
 package com.kutubuddin.mivra.camera
 
+import android.view.OrientationEventListener
 import androidx.camera.compose.CameraXViewfinder
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.Preview
 import androidx.camera.core.SurfaceRequest
+import androidx.camera.core.UseCase
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.lifecycle.awaitInstance
 import androidx.compose.foundation.layout.Box
@@ -71,6 +73,29 @@ fun CameraPreview(modifier: Modifier = Modifier) {
         onDispose {
             imageAnalysis.clearAnalyzer()
             analysisExecutor.shutdown()
+        }
+    }
+
+    DisposableEffect(
+        context,
+        imageAnalysis
+    ) {
+        val orientationListener = object : OrientationEventListener(context){
+            override fun onOrientationChanged(orientation: Int) {
+                if(orientation == ORIENTATION_UNKNOWN){
+                    return
+                }
+
+                imageAnalysis.targetRotation= UseCase.snapToSurfaceRotation(orientation)
+            }
+        }
+
+        if(orientationListener.canDetectOrientation()){
+            orientationListener.enable()
+        }
+
+        onDispose {
+            orientationListener.disable()
         }
     }
 
