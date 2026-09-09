@@ -9,6 +9,7 @@ activityCompose = "1.13.0"
 kotlin = "2.4.10"
 composeBom = "2026.08.00"
 camerax = "1.6.2"
+mlkitTextRecognition = "16.0.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -37,6 +38,9 @@ androidx-camera-lifecycle = { module = "androidx.camera:camera-lifecycle", versi
 androidx-camera-compose = { module = "androidx.camera:camera-compose", version.ref = "camerax" }
 # Lifecycle
 androidx-lifecycle-runtime-compose = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "lifecycleRuntimeKtx"}
+
+# ML-Kit
+mlkit-text-recognition = { module = "com.google.mlkit:text-recognition", version.ref = "mlkitTextRecognition" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

@@ -58,4 +58,7 @@ dependencies {
     implementation(libs.androidx.camera.lifecycle)
     implementation(libs.androidx.camera.compose)
     implementation(libs.androidx.lifecycle.runtime.compose)
+
+    // ML-Kit
+    implementation(libs.mlkit.text.recognition)
 }
