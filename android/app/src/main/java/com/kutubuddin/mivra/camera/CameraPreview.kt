@@ -1,5 +1,6 @@
 package com.kutubuddin.mivra.camera
 
+import android.util.Size
 import android.view.OrientationEventListener
 import androidx.camera.compose.CameraXViewfinder
 import androidx.camera.core.CameraSelector
@@ -7,6 +8,9 @@ import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.Preview
 import androidx.camera.core.SurfaceRequest
 import androidx.camera.core.UseCase
+import androidx.camera.core.resolutionselector.AspectRatioStrategy
+import androidx.camera.core.resolutionselector.ResolutionSelector
+import androidx.camera.core.resolutionselector.ResolutionStrategy
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.lifecycle.awaitInstance
 import androidx.compose.foundation.layout.Box
@@ -50,9 +54,22 @@ fun CameraPreview(modifier: Modifier = Modifier) {
             }
     }
 
+    val resolutionSelector = remember {
+        ResolutionSelector.Builder()
+            .setAspectRatioStrategy(AspectRatioStrategy.RATIO_4_3_FALLBACK_AUTO_STRATEGY)
+            .setResolutionStrategy(
+                ResolutionStrategy(
+                    Size(1280, 960),
+                    ResolutionStrategy.FALLBACK_RULE_CLOSEST_HIGHER_THEN_LOWER
+                )
+            )
+            .build()
+    }
+
     val imageAnalysis = remember {
         ImageAnalysis.Builder()
             .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
+            //.setResolutionSelector(resolutionSelector)
             .build()
     }
 
@@ -64,12 +81,13 @@ fun CameraPreview(modifier: Modifier = Modifier) {
         DiagnosticFrameAnalyzer()
     }
 
+
     DisposableEffect(
         imageAnalysis,
         analysisExecutor,
         diagnosticAnalyzer
     ) {
-        imageAnalysis.setAnalyzer(analysisExecutor,diagnosticAnalyzer)
+        imageAnalysis.setAnalyzer(analysisExecutor, diagnosticAnalyzer)
         onDispose {
             imageAnalysis.clearAnalyzer()
             analysisExecutor.shutdown()
@@ -80,17 +98,17 @@ fun CameraPreview(modifier: Modifier = Modifier) {
         context,
         imageAnalysis
     ) {
-        val orientationListener = object : OrientationEventListener(context){
+        val orientationListener = object : OrientationEventListener(context) {
             override fun onOrientationChanged(orientation: Int) {
-                if(orientation == ORIENTATION_UNKNOWN){
+                if (orientation == ORIENTATION_UNKNOWN) {
                     return
                 }
 
-                imageAnalysis.targetRotation= UseCase.snapToSurfaceRotation(orientation)
+                imageAnalysis.targetRotation = UseCase.snapToSurfaceRotation(orientation)
             }
         }
 
-        if(orientationListener.canDetectOrientation()){
+        if (orientationListener.canDetectOrientation()) {
             orientationListener.enable()
         }
 
@@ -131,7 +149,7 @@ fun CameraPreview(modifier: Modifier = Modifier) {
         } catch (exception: Exception) {
             cameraError = exception.message ?: "Unable to start camera"
         } finally {
-            cameraProvider.unbind(preview,imageAnalysis)
+            cameraProvider.unbind(preview, imageAnalysis)
         }
     }
 
